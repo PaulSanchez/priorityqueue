@@ -1,15 +1,19 @@
-# TODO: Write documentation for `Priorityqueue`
+# Provides implementations for `MinHeap` or `MaxHeap` containers. Elements to be
+# stored in the containers must implement **<=>**, a.k.a. the *spaceship operator*,
+# to define their ordering property.
+#
 module PriorityQueue
   VERSION = "0.1.0"
 
-  # Minimum-first Array-based PriorityQueue, implemented as a heap.
+  # Implements a minimum-first `PriorityQueue` using an array-based heap.
   class MinHeap(T)
-    # Construct an empty PQ.
+    # Constructs an empty `PriorityQueue`.
     def initialize
       @elements = Array(T).new
     end
 
-    # Construct a heap with an initial set of data, in linear time.
+    # Constructs a `PriorityQueue` from an initial set of *data*, in linear time.
+    # The *data* can be provided as any `Enumerable` collection, such as an `Array`.
     def initialize(data : Enumerable(T))
       @elements = (data.is_a?(Array) ? data.dup : data.to_a)
       if @elements.size > 1
@@ -17,49 +21,65 @@ module PriorityQueue
       end
     end
 
-    # Push +element+ onto the priority queue.
+    # Pushes a single *element* onto the priority queue.
+    #
+    # Returns `self` so that operations can be chained.
     def push(element : T)
       @elements << element
-      # bubble up the element that we just added
       bubble_up
       self
     end
 
-    # Inspect the element at the head of the queue.
+    # Inspects the element at the head of the queue without removing it.
+    #
+    # Returns the value of the first item in the queue, or `nil` if the
+    # queue is empty.
     def peek
-      # the first element will always be the min, because of the heap constraint
       empty? ? nil : @elements[0]
     end
 
-    # Remove and return the next element from the queue, determined by priority.
+    # Removes and returns the element at the head of the queue.
+    #
+    # Returns the value of the first item in the queue, or `nil` if the
+    # queue is empty.
     def pop
       return nil if empty?
-      my_min = @elements[0]
+      my_first = @elements[0]
       last = @elements.pop
       unless empty?
         @elements[0] = last
         bubble_down
       end
-      my_min
+      my_first
     end
 
-    # Empty the priority queue, discarding any data it contained.
+    # Empties the priority queue, discarding any data it contained.
+    #
+    # Returns `self` so that operations can be chained.
     def clear
       @elements = [] of T
       self
     end
 
-    # Return a boolean indicating whether the queue is empty or not.
+    # Returns a boolean indicating whether the queue is empty or not.
     def empty?
       @elements.size < 1
     end
 
-    # Return the number of elements currently stored in the PQ.
+    # Returns the number of elements currently stored in the queue.
     def size
       @elements.size
     end
 
-    # Replace the root element without popping (usually after a peek).
+    # Replaces the current first *element* with the provided *element*,
+    # then reorders the elements as needed to restore the heap property.
+    #
+    # This would usually be done after a `peek` to improve efficiency.
+    # If you frequently do a `push` immediately after performing a `pop`
+    # this method eliminates the bubble-up operation performed by `pop`,
+    # cutting the number of traversals of the heap in half.
+    #
+    # Returns `self` so that operations can be chained.
     def replace_first(element : T)
       if element
         @elements[0] = element
@@ -103,7 +123,8 @@ module PriorityQueue
     end
   end
 
-  # Maximum-first Array-based PriorityQueue, implemented as a heap.
+  # Implements a maximum-first `PriorityQueue` using an array-based heap.
+  # This implementation subclasses `MinHeap` but reverses element comparisons.
   class MaxHeap(T) < MinHeap(T)
     @[AlwaysInline]
     private def cmp(elt1 : T, elt2 : T)
