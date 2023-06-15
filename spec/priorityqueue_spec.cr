@@ -2,7 +2,7 @@ require "./spec_helper"
 
 describe PriorityQueue do
   describe "MinHeap Operations" do
-    it "should let you insert and remove one item" do
+    it "should let you insert and remove one item at a time" do
       heap = PriorityQueue::MinHeap(Int32).new
       heap.size.should eq(0)
       heap.empty?.should eq(true)
@@ -48,7 +48,7 @@ describe PriorityQueue do
   end
 
   describe "MaxHeap Operations" do
-    it "should let you insert and remove one item" do
+    it "should let you insert and remove one item at a time" do
       heap = PriorityQueue::MaxHeap(Int32).new
       heap.size.should eq(0)
       heap.empty?.should eq(true)
