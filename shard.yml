@@ -4,6 +4,6 @@ version: 0.1.0
 authors:
   - Paul J Sanchez <pjs@alum.mit.edu>
 
-crystal: 1.7.3
+crystal: 1.8.2
 
 license: MIT
