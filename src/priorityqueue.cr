@@ -70,7 +70,7 @@ module PriorityQueue
 
     @[AlwaysInline]
     private def cmp(elt1 : T, elt2 : T)
-      elt1 < elt2 ? -1 : (elt1 > elt2 ? 1 : 0)
+      elt1 <=> elt2
     end
 
     private def bubble_up : Nil
