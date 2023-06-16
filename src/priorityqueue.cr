@@ -1,9 +1,9 @@
 # Provides implementations for `MinHeap` or `MaxHeap` containers. Elements to be
-# stored in the containers must implement **<=>**, a.k.a. the *spaceship operator*,
-# to define their ordering property.
+# stored in the containers must implement `<` and `>` to define their ordering property.
+#
 #
 module PriorityQueue
-  VERSION = "0.1.0"
+  VERSION = "0.1.1"
 
   # Implements a minimum-first `PriorityQueue` using an array-based heap.
   class MinHeap(T)
@@ -90,7 +90,7 @@ module PriorityQueue
 
     @[AlwaysInline]
     private def cmp(elt1 : T, elt2 : T)
-      elt1 <=> elt2
+      elt1 < elt2 ? -1 : (elt1 > elt2 ? 1 : 0)
     end
 
     private def bubble_up : Nil
